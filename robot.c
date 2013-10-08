@@ -145,6 +145,19 @@ void init(){
 	motor[clawServo] = -127;		//close the claw
 }
 
+void victoryDance(){
+	if(vexRT[Btn8D] == 1){
+		int change = motor[armMove] + new Random().nextInt(5)-2;
+		if(change > -127 && change < 127){
+			motor[armMove] = change;
+		}
+		motor[clawServo] = -127;
+		motor[clawSpin] = 127;
+		motor[armExtend] = -127;
+		motor[bodyRotateMotor] = 40;
+	}
+}
+
 task main ()
 {
 	init();
