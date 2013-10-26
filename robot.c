@@ -1,7 +1,4 @@
-                                                                     
-                                                                     
-                                                                     
-                                             
+           
 #pragma config(Motor,  port2,           bodyRotateMotor, tmotorServoContinuousRotation, openLoop)
 #pragma config(Motor,  port3,           armExtend,     tmotorServoContinuousRotation, openLoop)
 #pragma config(Motor,  port4,           clawServo,     tmotorServoStandard, openLoop)
