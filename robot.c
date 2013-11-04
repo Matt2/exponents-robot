@@ -1,4 +1,3 @@
-           
 #pragma config(Motor,  port2,           bodyRotateMotor, tmotorServoContinuousRotation, openLoop)
 #pragma config(Motor,  port3,           armExtend,     tmotorServoContinuousRotation, openLoop)
 #pragma config(Motor,  port4,           clawServo,     tmotorServoStandard, openLoop)
@@ -60,7 +59,7 @@ void rotateBody()
 	int readJoy_x;			// will hold the X value of the analog stick
 	int joy_x;				// will hold the X value after being applied to the parabolic scale
 	int gain_x = 47;		//change this when you change max/min Motor Speed.  Graph in mathematica so it makes sense
-	int maxMotorSpeed = 60;	//pretty slow
+	int maxMotorSpeed = 45;	//pretty slow
 	int deadBand = 10;
 
 	if(slowMode == 1)
@@ -71,7 +70,8 @@ void rotateBody()
 
 
 	readJoy_x = vexRT[Ch4]; // This is the LEFT analog stick. For RIGHT, change 'Ch4' to 'Ch1'.
-	joy_x = parabolic(readJoy_x, gain_x, maxMotorSpeed);
+	//joy_x = parabolic(readJoy_x, gain_x, maxMotorSpeed);
+	joy_x = joy_x*maxMotorSpeed/127;
 	int motorVal = bound(maxMotorSpeed, (joy_x), (-1 * maxMotorSpeed));		//this is an int for easy debugging
 	motor[bodyRotateMotor] = motorVal;
 }
@@ -84,10 +84,10 @@ void armVertical()
 		joy_y=joy_y*1/2;
 		maxMotorSpeed = 64;
 	}
-	if(joy_y < 0)
+	/*if(joy_y < 0)
 	{
 		joy_y=joy_y*1/2;		//Drivers want it to go slower down.  We already have gravity helping
-	}
+	}*/
 	int motorVal = bound(maxMotorSpeed, (joy_y), (-1 * maxMotorSpeed));
 	motor[armMove] = motorVal;
 
@@ -120,7 +120,7 @@ void extendArm()
 void rotateClaw()
 {
 	int joy_y;
-	int maxMotorSpeed = 127;
+	int maxMotorSpeed = 97;
 
 	if(slowMode == 1)
 	{
@@ -129,6 +129,7 @@ void rotateClaw()
 	}
 
 	joy_y = clawRotateStick;						//left joystick vertical
+	joy_y = joy_y*maxMotorSpeed/127;
 	int motorVal = bound(maxMotorSpeed, (joy_y), (-1 * maxMotorSpeed));
 	motor[clawSpin] = motorVal;
 }
@@ -145,7 +146,7 @@ void toggleClaw()
 
 //drivers want a slow mode toggle button
 int push=0;
-void slowModeCheck()
+/*void slowModeCheck()
 {
 	if(SLOWMODEBUTTON == 1 && push == 0)				//we don't want to toggle if if was pushed the last time we hit this function
 	{
@@ -162,7 +163,7 @@ void slowModeCheck()
 	{
 		push = 0;
 	}
-}
+}*/
 
 /*An init function to make sure servos start in position, any other setup*/
 void init(){
@@ -175,7 +176,7 @@ task main ()
 	init();
 	while(true) // infinite loop, to keep the program alive
 	{
-		slowModeCheck();
+		//slowModeCheck();
 		rotateBody();
 		armVertical();
 		extendArm();
